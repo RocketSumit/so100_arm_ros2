@@ -1,23 +1,74 @@
-# ROS2 Humble Development Environment
+# SO100 Arm Development Workspace
 
-This repository contains a Docker-based development environment for ROS2 Humble.
-
-## Features
-
-- ROS2 Humble
-- NVIDIA GPU support
-- Host network access
-- USB and video device access
-- Development tools (git, vim, zsh)
-- Oh My Zsh pre-installed
-- Automatic user creation with sudo access
-- X11 forwarding for GUI applications
+This repository contains a Docker-based ROS2 Humble development environment for the SO100 robot arm. The environment is fully containerized, providing a consistent development setup with all necessary tools and dependencies.
 
 ## Prerequisites
 
 - Docker
 - Docker Compose
-- NVIDIA Container Toolkit
+- NVIDIA Container Toolkit (for GPU support)
+
+## Getting Started
+
+### 1. Build the Docker Container
+
+Build the ROS2 development container:
+
+```bash
+docker-compose build
+```
+
+This will create a Docker image with ROS2 Humble and all necessary development tools.
+
+### 2. Start the Container
+
+Start the container in detached mode:
+
+```bash
+docker-compose up -d
+```
+
+### 3. Enter the Container
+
+Enter the running container:
+
+```bash
+docker-compose exec ros2-dev bash
+```
+
+Once inside the container, you'll be in the ROS2 workspace at `/home/host_user/ros2_ws/`.
+
+### 4. Build the Workspace
+
+Inside the container, build all packages:
+
+```bash
+cd ~/ros2_ws
+colcon build
+source install/setup.bash
+```
+
+To build a specific package:
+
+```bash
+colcon build --packages-select <package_name>
+```
+
+### 5. Install Dependencies
+
+Install ROS2 dependencies using rosdep:
+
+```bash
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+### 6. Stop the Container
+
+When done, stop the container:
+
+```bash
+docker-compose down
+```
 
 ## Directory Structure
 
@@ -25,37 +76,13 @@ This repository contains a Docker-based development environment for ROS2 Humble.
 .
 ├── docker/
 │ ├── Dockerfile
-│ └── .env
+│ ├── .env
+│ └── ros_entrypoint.sh
 ├── docker-compose.yml
 ├── README.md
-└── src/ # Mount your ROS2 packages here
+└── src/ # ROS2 packages
+├── so100_description/
 ```
-
-## Usage
-
-1. Build the container:
-
-   ```bash
-   docker-compose build
-   ```
-
-2. Start the container:
-
-   ```bash
-   docker-compose up -d
-   ```
-
-3. Enter the container:
-
-   ```bash
-   docker-compose exec ros2-dev zsh
-   ```
-
-4. Stop the container:
-
-   ```bash
-   docker-compose down
-   ```
 
 ## Pre-commit Hooks
 
@@ -91,17 +118,17 @@ The hooks include:
 - C++ formatting with clang-format
 - Markdown formatting with Prettier
 
-## Development
+## Packages
 
-Your ROS2 packages should be placed in the `src/` directory. This directory is mounted inside the container at `/home/host_user/ros2_ws/src/`.
+```markdown
+src/
+├── so100_description/
+```
 
 ## Notes
 
 - The container runs with your host user's UID to avoid permission issues
-- GUI applications should work out of the box with X11 forwarding
+- GUI applications (RViz, etc.) work out of the box with X11 forwarding
 - USB devices and video devices are accessible inside the container
 - The container runs with host network mode for easy networking
-
-## Dependencies
-
-rosdep install --from-paths src --ignore-src -r -y
+- The `src/` directory is mounted inside the container at `/home/host_user/ros2_ws/src/`
