@@ -50,7 +50,7 @@ install(
 )
 
 install(
-  DIRECTORY include config
+  DIRECTORY include
   DESTINATION include
 )
 
