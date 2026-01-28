@@ -78,21 +78,9 @@ colcon build --packages-select so100_hardware_interface --cmake-args -DCMAKE_PRE
 
 ## Configuration
 
-Hardware parameters are typically provided via the robot description (URDF/xacro) used by ros2_control. A sample config is provided in `config/motor_config.yaml`:
-
-| Parameter     | Type   | Description                                  |
-| ------------- | ------ | -------------------------------------------- |
-| `use_serial`  | bool   | Enable serial communication with the servos. |
-| `serial_port` | string | Serial device (e.g. `"/dev/ttyACM0"`).       |
-| `baud_rate`   | int    | Baud rate (e.g. `1000000`).                  |
-
-Ensure these parameters are passed into the `<ros2_control>` hardware block (e.g. from `so100_bringup` or `so100_moveit_config`) so the interface receives them.
-
-## Usage
-
 This package provides a **plugin** for ros2_control. You do not run it as a standalone node. It is loaded by the controller manager when your robot description declares the `so100_hardware_interface/SO100ArmInterface` type.
 
-Example snippet in a ros2_control xacro:
+Example snippet in a ros2_control xacro where you can set the serial connection related params:
 
 ```xml
 <ros2_control name="So100Arm" type="system">
@@ -112,8 +100,6 @@ Launch your robot and controller manager as usual (e.g. via `so100_bringup` or `
 
 ```bash
 so100_hardware_interface/
-├── config/
-│   └── motor_config.yaml    # Sample hardware parameters
 ├── include/ros2_so100_interface/
 │   └── so100_arm_interface.hpp
 ├── src/
