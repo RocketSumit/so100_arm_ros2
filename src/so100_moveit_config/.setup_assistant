@@ -1,0 +1,23 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: so100_bringup
+    relative_path: config/so100_arm.urdf
+  srdf:
+    relative_path: config/so100_arm.srdf
+  package_settings:
+    author_name: Sumit Patidar
+    author_email: sumitpatidar96@gmail.com
+    generated_timestamp: 1762869221
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
